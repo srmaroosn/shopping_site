@@ -1,0 +1,18 @@
+{% extends 'nav.html' %}
+{% block content %}
+<h1>Register</h1>
+<form action="" method="POST">
+    {% csrf_token %}
+    <label for="username">Username</label>
+    {{ form.username}}
+    <label for="Email">Email</label>
+    {{form.email}}
+    <label for="password">Password</label>
+    {{form.password1}}
+    <label for="password">Confirm Password</label>
+    {{form.password2}}
+    <button class="btn btn-sucess" type="submit"> submit
+    </button>
+    {{ from.errors }}
+</form>
+{% endblock %}

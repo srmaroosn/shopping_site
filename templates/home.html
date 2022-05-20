@@ -1,0 +1,37 @@
+{% extends 'nav.html' %}
+{% load static %}
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Site</title>
+    
+    <link rel="stylesheet" href="{% static 'home.css' %}">
+</head>
+
+<body>
+    <div class="row">
+        {% for product in products %}
+        <div class="col-lg-4">
+            <img class="image" src="{{product.imageurl}}" alt="">
+            <div class="box-element">
+                <h6><strong>{{product.name}}</strong></h6>
+                <button data-product={{product.id}} data-action="add"  class="btn btn-outline-secondary add-btn update-cart">Add to Cart</button>
+                <a href="#" class="btn btn-outline-sucess" >View</a>
+                <h4 style="display: inline-block;">RS {{product.price|floatformat:0}}</h4>
+            </div>
+        </div>
+        {% endfor %}
+    </div> 
+  
+    <script type="text/javascript" src="{% static 'js/cart.js' %}"></script>
+    
+</body>
+
+</html>
+{% endblock %}

@@ -1,0 +1,12 @@
+.box-element{
+    box-shadow: hsl(0, 0%, 80%) 0 0 16px;
+    background-color: #fff;
+    border-radius: 4px;
+    padding: 10px;
+}
+.image{
+    width: 100%;
+    height: 200px;
+    margin-top: 20px;
+
+}
