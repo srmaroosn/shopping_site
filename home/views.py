@@ -1,11 +1,13 @@
 import datetime
+from django.contrib import messages
 from django.shortcuts import redirect, render
-from django.contrib.auth import authenticate, login
-from home.forms import CreateUser
+from django.contrib.auth import authenticate, login, logout
+from home.forms import CreateUser, UserRegistration
 from .models import *
 from django.http import JsonResponse
 import json
 from django.forms import *
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 def home(request):
@@ -100,17 +102,22 @@ def processOrder(request):
     return JsonResponse('Payment Complete', safe=False)
 
 
-def login(request):
-    if request.method=="POST":
-        username= request.POST.get("username")
-        password=request.POST.get("password")
-        user = authenticate(request,username=username, password=password)
+def user_login(request):
+    if request.method == "POST":
+        username = request.POST.get('username')
         
+        password = request.POST.get('password')
+        
+        user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            return redirect('home')
-    else:
-        return render(request, 'login.html', context={})
+            print("is this running")
+            return redirect('user_registration')
+        else:
+            messages.warning(request, "The information is not correct")
+    
+    return render(request,'login.html',context={})
+
 
 def register(request):
     if request.method =="GET":
@@ -122,8 +129,30 @@ def register(request):
         form=CreateUser(request.POST)
         if form.is_valid():
             form.save()
-            print("hello")
+            
             return redirect('login')
     return render(request, 'register.html', context={'form':form})        
 
+
+def user_registration(request):
+    if request.method == "GET":
+        forms=UserRegistration()
+        context={'forms':forms}
+        return render(request, 'user_details.html', context)
+
+    else:
+        forms=UserRegistration(request.POST)
+        
+        if forms.is_valid():
+            forms.save()
+           
+            return redirect('home')
+    return render(request, 'user_details.html', context={'forms':forms})
+
+
+def user_logout(request):
+    logout(request)
     
+    return redirect('home')
+
+        
