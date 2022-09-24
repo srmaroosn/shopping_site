@@ -22,9 +22,43 @@ def cart(request):
         order, created = Order.objects.get_or_create(customer=customer, complete=False)
         items = order.orderitems_set.all()
     else:
+        try:
+        #getting the cookies 
+            cart = json.loads(request.COOKIES['cart'])
+        except:
+            cart={}
+
+        print(cart)
         items= []
         #passing an empty dictionary for those who are not logged in 
         order={'get_cart_total':0, 'get_cart_total_items':0}
+        cartItems =order['get_cart_total_items']
+
+
+        for i in cart:
+            cartItems += cart[i]["quantity"]
+
+            product = Product.objects.get(id=i)
+            total=(product.price * cart[i]['quantity'])
+
+            order['get_cart_total'] += total
+            order['get_cart_total_items'] += cart[i]['quantity']
+
+            item={
+                'product':{
+                    'id':product.id,
+                    'name':product.name,
+                    'price':product.price,
+                    'image':product.image,
+
+                },
+                'quantity':cart[i]['quantity'],
+                'get_total':total
+                
+            }
+            items.append(item)
+
+
     context={'items':items, 'order':order, 'shipping':False}
     return render(request, 'cart.html',context)
 
@@ -155,4 +189,5 @@ def user_logout(request):
     
     return redirect('home')
 
-        
+def bikes(request):
+    return render(request, 'bike.html', context={})       
